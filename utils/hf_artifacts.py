@@ -6,6 +6,7 @@ import json
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, Tuple, List, Optional
+from contextlib import contextmanager
 
 import joblib
 from huggingface_hub import hf_hub_download, HfApi
@@ -21,15 +22,33 @@ def _run_id() -> str:
     return datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 
 
+@contextmanager
 def _patch_pathlib_windows_on_linux():
     """
     Fix: artefacts joblib créés sur Windows contiennent parfois des WindowsPath.
     Sur Linux (Streamlit Cloud), l'unpickle crash.
+    On remappe temporairement WindowsPath -> PosixPath pendant le joblib.load().
     """
-    if os.name != "nt":
-        import pathlib
+    if os.name == "nt":
+        # Sur Windows, rien à patcher
+        yield
+        return
+
+    import pathlib
+
+    old_windows_path = getattr(pathlib, "WindowsPath", None)
+    old_pure_windows_path = getattr(pathlib, "PureWindowsPath", None)
+
+    try:
         pathlib.WindowsPath = pathlib.PosixPath          # type: ignore
         pathlib.PureWindowsPath = pathlib.PurePosixPath  # type: ignore
+        yield
+    finally:
+        # Restore pour éviter effets de bord
+        if old_windows_path is not None:
+            pathlib.WindowsPath = old_windows_path       # type: ignore
+        if old_pure_windows_path is not None:
+            pathlib.PureWindowsPath = old_pure_windows_path  # type: ignore
 
 
 def read_latest(
@@ -62,7 +81,6 @@ def download_artifacts_from_latest(
     Télécharge les 4 artefacts du run pointé par latest.json, puis charge en mémoire.
     Retourne: model, pipeline, feature_cols, metadata
     """
-    _patch_pathlib_windows_on_linux()
 
     latest = read_latest(
         repo_id=repo_id,
@@ -70,6 +88,8 @@ def download_artifacts_from_latest(
         hf_token=hf_token,
         artifacts_dir=artifacts_dir,
     )
+
+    # ✅ ton latest.json contient "run_dir"
     run_dir = latest["run_dir"]  # ex: artifacts/runs/2026-01-13_07-12-05
 
     def dl(name: str) -> str:
@@ -86,9 +106,10 @@ def download_artifacts_from_latest(
     feat_path  = dl("features.json")
     meta_path  = dl("metadata.json")
 
-    # IMPORTANT: patch déjà appliqué avant ces loads
-    model = joblib.load(model_path)
-    pipe  = joblib.load(pipe_path)
+    # ✅ Patch UNIQUEMENT pendant les loads
+    with _patch_pathlib_windows_on_linux():
+        model = joblib.load(model_path)
+        pipe  = joblib.load(pipe_path)
 
     with open(feat_path, "r", encoding="utf-8") as f:
         feature_cols = json.load(f)
@@ -118,9 +139,6 @@ def publish_run_to_hf(
             raise FileNotFoundError(f"Fichier manquant: {local_models_dir / f}")
 
     api = HfApi(token=hf_token)
-
-    # (optionnel mais utile) : créer le repo si pas encore créé
-    # api.create_repo(repo_id=repo_id, repo_type=repo_type, exist_ok=True)
 
     run_id = _run_id()
     run_dir = f"{artifacts_dir}/runs/{run_id}"
