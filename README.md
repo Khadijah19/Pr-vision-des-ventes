@@ -66,6 +66,7 @@ reproductible :
 - Étude des tendances temporelles
 - Analyse de l’impact des promotions et des catégories
 - Identification des valeurs manquantes et des valeurs extrêmes
+
 Veuillez trouver le lien [ici](https://www.kaggle.com/code/jacquesilly/eda-pr-vision-des-ventes)
 ### 📙 Notebook 02 – Prétraitement & Feature Engineering (Pipeline)
 - Traitement des valeurs manquantes
