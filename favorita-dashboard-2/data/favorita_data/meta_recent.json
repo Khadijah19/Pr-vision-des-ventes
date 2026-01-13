@@ -1,8 +1,0 @@
-{
-  "weeks": 12,
-  "max_date": "2017-08-15",
-  "start_date": "2017-05-23",
-  "rows_kept": 8970357,
-  "source": "data\\favorita_data\\train.csv",
-  "recent_parquet": "data\\favorita_data\\train_last12w.parquet"
-}
