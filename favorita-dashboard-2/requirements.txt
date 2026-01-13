@@ -1,0 +1,13 @@
+streamlit
+pandas
+numpy
+plotly
+scikit-learn
+joblib
+pyarrow
+lightgbm
+huggingface_hub
+fsspec
+pyarrow
+lightgbm
+joblib
