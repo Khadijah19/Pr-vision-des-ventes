@@ -1,0 +1,88 @@
+{
+  "trained_at": "2026-01-12T23:18:22",
+  "weeks_window": 12,
+  "split_config": {
+    "TOTAL_DAYS": 84,
+    "TEST_DAYS": 14,
+    "GAP_DAYS": 3
+  },
+  "feature_gap_days": 3,
+  "sales_history_days": 120,
+  "n_train": 7078551,
+  "n_test": 1461581,
+  "RMSE_log": 0.5486451247683918,
+  "MAE_log": 0.42362149253783854,
+  "R2_log": 0.5914644115981584,
+  "train_min_date": "2017-05-24",
+  "train_max_date": "2017-07-29",
+  "gap_min_date": "2017-07-30",
+  "gap_max_date": "2017-08-01",
+  "test_min_date": "2017-08-02",
+  "test_max_date": "2017-08-15",
+  "versions": {
+    "python": "3.10.0 (tags/v3.10.0:b494f59, Oct  4 2021, 19:00:18) [MSC v.1929 64 bit (AMD64)]",
+    "sklearn": "1.7.2",
+    "pandas": "2.3.3",
+    "numpy": "2.2.6"
+  },
+  "model_name": "HistGradientBoostingRegressor",
+  "model_params": {
+    "max_depth": 8,
+    "learning_rate": 0.08,
+    "max_iter": 300,
+    "random_state": 42
+  },
+  "data_signature": {
+    "weeks": 12,
+    "files": [
+      {
+        "name": "train_last12w.parquet",
+        "path": "data/favorita_data/train_last12w.parquet",
+        "size": 26736776,
+        "mtime": 1768244330.7327414,
+        "hash": "f7874ad87b298f3c69a420d5bf48385a51ca24983f6230626cf7e736cc396c65",
+        "hash_method": "sha256"
+      },
+      {
+        "name": "items.csv",
+        "path": "data/favorita_data/items.csv",
+        "size": 101841,
+        "mtime": 1768244078.3007746,
+        "hash": "1efd8295f52c8531ec5bf6c3de37228a56bad2f2c653e79c4869baaf637edcc6",
+        "hash_method": "sha256"
+      },
+      {
+        "name": "stores.csv",
+        "path": "data/favorita_data/stores.csv",
+        "size": 1387,
+        "mtime": 1768149811.0528245,
+        "hash": "af503b2bce11d7906d249f81cc0598f10e2addcc9f6c59aa2d95c9f2652c296b",
+        "hash_method": "sha256"
+      },
+      {
+        "name": "oil.csv",
+        "path": "data/favorita_data/oil.csv",
+        "size": 20580,
+        "mtime": 1768149804.0575016,
+        "hash": "944b23b857580f9d804399346fd3ed69bffcb7facfd98c55fdb408b8d057cca7",
+        "hash_method": "sha256"
+      },
+      {
+        "name": "transactions.csv",
+        "path": "data/favorita_data/transactions.csv",
+        "size": 1552637,
+        "mtime": 1768149821.6762261,
+        "hash": "e116384a6981af74932832436aa2f6a43121f77ca81accc44e3a5160158ca03c",
+        "hash_method": "sha256"
+      },
+      {
+        "name": "holidays_events.csv",
+        "path": "data/favorita_data/holidays_events.csv",
+        "size": 22309,
+        "mtime": 1768149793.9182053,
+        "hash": "81a183d6c4d691b57f84a0fde6bbf734a5b3c36a74b97378bf33a592648e2999",
+        "hash_method": "sha256"
+      }
+    ]
+  }
+}
